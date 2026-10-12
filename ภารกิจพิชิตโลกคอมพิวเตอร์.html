@@ -1,0 +1,548 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#a29bfe">
+<title>ภารกิจพิชิตโลกคอมพิวเตอร์</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;width:100%;overflow-x:hidden}
+body{
+  font-family:"Noto Sans Thai","Sarabun","Thonburi","Tahoma",system-ui,sans-serif;
+  background:linear-gradient(160deg,#81ecec 0%,#a29bfe 50%,#fd79a8 100%);
+  background-attachment:fixed;color:#2d3436;min-height:100vh;min-height:100dvh;line-height:1.45;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-touch-callout:none;
+}
+#app{max-width:760px;margin:0 auto;padding:12px 12px 28px;width:100%}
+.screen{display:none;animation:pop .35s ease}
+.screen.active{display:block}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card{background:#fff;border-radius:26px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.15);width:100%}
+h1,h2,p{margin:0;overflow-wrap:anywhere;word-break:break-word}
+.title{font-size:clamp(26px,7vw,40px);font-weight:800;color:#6c5ce7;text-align:center;line-height:1.25}
+.sub{text-align:center;color:#636e72;margin-top:6px;font-size:clamp(15px,4vw,18px)}
+.btn{
+  display:block;width:100%;min-height:56px;padding:12px 18px;border:none;border-radius:20px;
+  font-family:inherit;font-size:clamp(17px,4.6vw,20px);font-weight:800;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,#00b894,#00cec9);box-shadow:0 5px 0 rgba(0,0,0,.18);
+  touch-action:manipulation;margin-top:12px;overflow-wrap:anywhere;
+}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn.purple{background:linear-gradient(135deg,#6c5ce7,#a29bfe)}
+.btn.orange{background:linear-gradient(135deg,#fdcb6e,#e17055)}
+.btn.pink{background:linear-gradient(135deg,#fd79a8,#e84393)}
+.btn.gray{background:linear-gradient(135deg,#b2bec3,#636e72)}
+.btn.small{min-height:48px;font-size:16px;margin-top:0}
+.hero-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.hero-icons .ico{background:#f1f2ff;border-radius:20px;padding:8px;animation:bob 2.4s ease-in-out infinite}
+.hero-icons .ico:nth-child(2n){animation-delay:.4s}
+.hero-icons .ico:nth-child(3n){animation-delay:.8s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+svg{display:block;width:100%;height:auto}
+.how{background:#fff9e6;border-radius:18px;padding:14px 16px;margin-top:6px;font-size:clamp(15px,3.9vw,17px)}
+.how b{color:#e17055}
+.how ul{margin:6px 0 0;padding-left:22px}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.topbar .back{flex:0 0 auto;width:auto;padding:10px 16px}
+.topbar h2{flex:1;color:#fff;font-size:clamp(20px,5.5vw,26px);text-shadow:0 2px 4px rgba(0,0,0,.25)}
+.level-list{display:grid;gap:12px}
+.level{
+  display:flex;align-items:center;gap:14px;width:100%;min-height:84px;text-align:left;
+  background:#fff;border:none;border-radius:24px;padding:14px 16px;font-family:inherit;color:#2d3436;
+  box-shadow:0 5px 0 rgba(0,0,0,.15);cursor:pointer;touch-action:manipulation;
+}
+.level:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.level .num{flex:0 0 52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#fd79a8,#a29bfe);color:#fff;font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center}
+.level .info{flex:1;min-width:0}
+.level .name{display:block;font-weight:800;font-size:clamp(16px,4.5vw,20px)}
+.level .desc{display:block;font-size:clamp(13px,3.5vw,15px);color:#636e72}
+.level .best{display:block;font-size:13px;color:#00a383;font-weight:700}
+.level .state{flex:0 0 auto;font-size:28px}
+.level.locked{opacity:.6;background:#dfe6e9;cursor:not-allowed}
+.level.locked .num{background:#b2bec3}
+.totalbox{margin-top:14px;background:rgba(255,255,255,.92);border-radius:18px;padding:12px;text-align:center;font-weight:700}
+
+/* ---- เล่นเกม ---- */
+.stat{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;font-weight:800;font-size:clamp(15px,4vw,18px);margin-bottom:8px;text-shadow:0 2px 4px rgba(0,0,0,.25)}
+.stat .sbtn{flex:0 0 auto;width:48px;height:48px;border:none;border-radius:50%;background:rgba(255,255,255,.9);font-size:22px;cursor:pointer;touch-action:manipulation;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.bar{height:14px;background:rgba(255,255,255,.45);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffeaa7,#fd79a8);border-radius:10px;transition:width .4s}
+.tip{background:#fff;border-radius:16px;padding:10px 14px;margin-bottom:10px;text-align:center;font-weight:700;color:#6c5ce7;font-size:clamp(14px,3.8vw,17px)}
+.board{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;background:rgba(255,255,255,.55);border-radius:26px;padding:10px}
+.col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.col .lab{text-align:center;font-weight:800;color:#6c5ce7;font-size:clamp(13px,3.5vw,15px)}
+.slot{
+  position:relative;background:#fff;border:3px dashed #b9a8ff;border-radius:22px;padding:6px 8px;min-height:74px;
+  display:flex;flex-direction:column;gap:4px;transition:transform .15s,border-color .15s,background .15s;min-width:0;
+}
+.slot.row{flex-direction:row;align-items:center}
+.slot .pic{flex:0 0 58px;width:58px}
+.slot .lhs{display:flex;align-items:center;gap:8px;min-width:0}
+.slot .lhs b{font-size:clamp(14px,3.8vw,17px);overflow-wrap:anywhere;line-height:1.3}
+.slot .em{font-size:30px;line-height:1;flex:0 0 auto}
+.slot .drop{
+  flex:1;min-width:0;min-height:32px;border-radius:14px;background:#f4f0ff;color:#9d8fe0;font-size:clamp(12px,3.3vw,14px);
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:4px 6px;font-weight:700;gap:6px;overflow-wrap:anywhere;
+}
+.slot.over{border-color:#fd79a8;background:#fff0f6;transform:scale(1.04)}
+.slot.over .drop{background:#ffd6e7;color:#e84393}
+.slot.matched{border:3px solid #00b894;background:#e8fff6;animation:hop .5s}
+.slot.matched .drop{background:#c8f7e4;color:#00694f;font-size:clamp(13px,3.6vw,16px)}
+.slot .ok{display:none;position:absolute;top:-12px;right:-8px;font-size:28px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+.slot.matched .ok{display:block;animation:hop .5s}
+.slot.shake{animation:shake .45s;border-color:#e17055}
+@keyframes hop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.chip{
+  touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+  min-height:64px;padding:8px 10px;border-radius:20px;color:#fff;font-weight:800;text-align:center;
+  font-size:clamp(14px,3.9vw,18px);display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 5px 0 rgba(0,0,0,.2);text-shadow:0 1px 2px rgba(0,0,0,.35);overflow-wrap:anywhere;line-height:1.3;
+}
+.chip .mini{flex:0 0 38px;width:38px;background:rgba(255,255,255,.9);border-radius:10px;padding:2px}
+.chip.c0{background:linear-gradient(135deg,#ff7675,#e17055)}
+.chip.c1{background:linear-gradient(135deg,#74b9ff,#0984e3)}
+.chip.c2{background:linear-gradient(135deg,#00b894,#00897b)}
+.chip.c3{background:linear-gradient(135deg,#a29bfe,#6c5ce7)}
+.chip.c4{background:linear-gradient(135deg,#fd79a8,#e84393)}
+.chip.c5{background:linear-gradient(135deg,#f6b93b,#e58e26)}
+.chip.sel{outline:4px solid #ffeaa7;transform:scale(1.04)}
+.chip.ghost{opacity:.3}
+.chip.done{visibility:hidden}
+.chip.shake{animation:shake .45s}
+.chip.dragging{position:fixed;z-index:1000;pointer-events:none;margin:0;opacity:.96;transform:scale(1.07) rotate(-3deg);box-shadow:0 14px 26px rgba(0,0,0,.3)}
+.sp{position:fixed;z-index:1100;pointer-events:none;font-size:22px;animation:sparkle .9s ease-out forwards}
+@keyframes sparkle{from{opacity:1;transform:translate(0,0) scale(.6)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.5)}}
+#toast{
+  position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;z-index:1200;
+  background:#e84393;color:#fff;font-weight:800;font-size:clamp(16px,4.4vw,20px);padding:12px 22px;border-radius:30px;
+  box-shadow:0 6px 18px rgba(0,0,0,.3);pointer-events:none;transition:all .25s;max-width:92vw;text-align:center;
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.good{background:#00b894}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+
+/* ---- สรุปผล ---- */
+.result{text-align:center}
+.stars{font-size:48px;letter-spacing:6px;margin:6px 0}
+.big{font-size:clamp(36px,11vw,56px);font-weight:800;color:#e84393;line-height:1.1}
+.msg{margin-top:10px;font-size:clamp(16px,4.3vw,19px)}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.rows div{background:#f1f2ff;border-radius:16px;padding:10px;font-weight:700}
+.rows small{display:block;color:#636e72;font-weight:600}
+.final{background:linear-gradient(135deg,#ffeaa7,#fab1a0);border-radius:18px;padding:14px;margin-top:12px;font-weight:700}
+@media (min-width:600px){.slot .pic{flex-basis:70px;width:70px}.board{padding:16px;gap:18px}}
+@media (max-height:480px) and (orientation:landscape){
+  #app{padding-top:6px}.hero-icons{margin:8px 0}.tip{padding:6px 10px;margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <section id="home" class="screen active">
+    <div class="card">
+      <h1 class="title">🖥️ ภารกิจพิชิต<br>โลกคอมพิวเตอร์</h1>
+      <p class="sub">เกมลากแล้ววางจับคู่ สนุกกับโลกคอมพิวเตอร์ 💕</p>
+      <div class="hero-icons" id="heroIcons"></div>
+      <button class="btn" id="btnStart">▶ เริ่มเกม</button>
+      <div class="how">
+        <b>วิธีเล่น</b>
+        <ul>
+          <li>ใช้นิ้วลากการ์ดสีสัน ๆ ฝั่งขวา ไปวางบนช่องที่ตรงกันฝั่งซ้าย</li>
+          <li>ลากไม่สะดวก? แตะการ์ดแล้วแตะที่ช่องก็ได้</li>
+          <li>จับคู่ถูกได้ 10 คะแนน ผิดไม่เป็นไร ลองใหม่ได้เรื่อย ๆ</li>
+          <li>จับคู่ครบทุกคู่เพื่อผ่านด่านและปลดล็อกด่านถัดไป</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="levels" class="screen">
+    <div class="topbar">
+      <button class="btn gray small back" id="btnLevelsHome">🏠 หน้าแรก</button>
+      <h2>เลือกด่าน</h2>
+    </div>
+    <div class="level-list" id="levelList"></div>
+    <div class="totalbox" id="totalBox"></div>
+    <button class="btn gray small" id="btnReset" style="margin-top:12px">ล้างความคืบหน้าและเริ่มใหม่</button>
+  </section>
+
+  <section id="play" class="screen">
+    <div class="stat">
+      <span id="pLevel"></span>
+      <span id="pScore"></span>
+      <button class="sbtn" id="btnSound" type="button" aria-label="เปิดปิดเสียง">🔊</button>
+    </div>
+    <div class="bar"><i id="pBar"></i></div>
+    <div class="tip" id="pTip"></div>
+    <div class="board" id="board">
+      <div class="col"><div class="lab" id="labL"></div><div id="slots" class="col"></div></div>
+      <div class="col"><div class="lab" id="labR"></div><div id="chips" class="col"></div></div>
+    </div>
+    <div class="actions">
+      <button class="btn gray small" id="btnQuit" type="button">⬅ เลือกด่าน</button>
+      <button class="btn orange small" id="btnRestart" type="button">🔁 เล่นใหม่</button>
+    </div>
+  </section>
+
+  <section id="result" class="screen">
+    <div class="card result">
+      <h2 id="rTitle" class="title"></h2>
+      <div class="stars" id="rStars"></div>
+      <div class="big" id="rScore"></div>
+      <div class="rows">
+        <div><small>จับคู่ได้</small><span id="rPairs"></span></div>
+        <div><small>ลองผิด</small><span id="rMiss"></span></div>
+      </div>
+      <p class="msg" id="rMsg"></p>
+      <div class="final" id="rFinal" style="display:none"></div>
+      <button class="btn" id="btnNextLevel">ด่านถัดไป ➜</button>
+      <button class="btn orange" id="btnRetry">🔁 เล่นอีกครั้ง</button>
+      <button class="btn purple" id="btnToLevels">📋 เลือกด่าน</button>
+      <button class="btn gray" id="btnToHome">🏠 กลับหน้าแรก</button>
+    </div>
+  </section>
+
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- ภาพอุปกรณ์ (SVG ฝังในไฟล์) ---------- */
+var ICONS={
+monitor:'<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="จอภาพ"><rect x="10" y="10" width="100" height="62" rx="8" fill="#2d3436"/><rect x="16" y="16" width="88" height="50" rx="4" fill="#74b9ff"/><circle cx="40" cy="36" r="9" fill="#ffeaa7"/><path d="M16 66 L50 42 L72 58 L88 46 L104 58 V66Z" fill="#55efc4"/><rect x="52" y="72" width="16" height="12" fill="#636e72"/><rect x="34" y="84" width="52" height="8" rx="4" fill="#b2bec3"/></svg>',
+mouse:'<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="เมาส์"><path d="M60 26 C50 4 34 8 34 8" fill="none" stroke="#636e72" stroke-width="4" stroke-linecap="round"/><rect x="36" y="22" width="48" height="72" rx="24" fill="#ff7675"/><path d="M36 54 H84" stroke="#d63031" stroke-width="3"/><path d="M60 22 V54" stroke="#d63031" stroke-width="3"/><rect x="54" y="30" width="12" height="18" rx="6" fill="#fff"/></svg>',
+keyboard:'<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="คีย์บอร์ด"><rect x="6" y="26" width="108" height="52" rx="8" fill="#6c5ce7"/><g fill="#fff"><rect x="12" y="32" width="12" height="10" rx="2"/><rect x="28" y="32" width="12" height="10" rx="2"/><rect x="44" y="32" width="12" height="10" rx="2"/><rect x="60" y="32" width="12" height="10" rx="2"/><rect x="76" y="32" width="12" height="10" rx="2"/><rect x="92" y="32" width="14" height="10" rx="2"/><rect x="12" y="46" width="12" height="10" rx="2"/><rect x="28" y="46" width="12" height="10" rx="2"/><rect x="44" y="46" width="12" height="10" rx="2"/><rect x="60" y="46" width="12" height="10" rx="2"/><rect x="76" y="46" width="12" height="10" rx="2"/><rect x="92" y="46" width="14" height="10" rx="2"/><rect x="22" y="60" width="76" height="10" rx="2"/></g></svg>',
+speaker:'<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ลำโพง"><rect x="30" y="8" width="60" height="84" rx="10" fill="#00b894"/><circle cx="60" cy="30" r="9" fill="#fff"/><circle cx="60" cy="30" r="4" fill="#00b894"/><circle cx="60" cy="64" r="19" fill="#fff"/><circle cx="60" cy="64" r="12" fill="#2d3436"/><circle cx="60" cy="64" r="5" fill="#636e72"/><path d="M100 40 Q108 50 100 60 M106 32 Q120 50 106 68" fill="none" stroke="#fdcb6e" stroke-width="4" stroke-linecap="round"/></svg>',
+printer:'<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="เครื่องพิมพ์"><rect x="32" y="8" width="56" height="28" rx="3" fill="#fff" stroke="#b2bec3" stroke-width="3"/><rect x="8" y="34" width="104" height="42" rx="10" fill="#0984e3"/><circle cx="96" cy="48" r="4" fill="#55efc4"/><rect x="26" y="62" width="68" height="30" rx="3" fill="#fff" stroke="#b2bec3" stroke-width="3"/><path d="M36 72 H84 M36 80 H72" stroke="#74b9ff" stroke-width="3" stroke-linecap="round"/></svg>',
+webcam:'<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="เว็บแคม"><circle cx="60" cy="38" r="30" fill="#2d3436"/><circle cx="60" cy="38" r="21" fill="#636e72"/><circle cx="60" cy="38" r="13" fill="#74b9ff"/><circle cx="54" cy="32" r="4" fill="#fff"/><circle cx="60" cy="10" r="3" fill="#ff7675"/><path d="M52 66 H68 L72 80 H48Z" fill="#b2bec3"/><rect x="34" y="80" width="52" height="10" rx="5" fill="#636e72"/></svg>'
+};
+var NAMES={monitor:"จอภาพ",mouse:"เมาส์",keyboard:"คีย์บอร์ด",speaker:"ลำโพง",printer:"เครื่องพิมพ์",webcam:"เว็บแคม"};
+
+/* ---------- ด่านและคู่ที่ต้องจับ ---------- */
+function devPairs(keys){return keys.map(function(k){return {id:k,icon:k,right:{text:NAMES[k]}};});}
+var LEVELS=[
+ {title:"จับคู่รูปกับชื่อ",desc:"ลากชื่ออุปกรณ์ไปวางบนรูป",emoji:"🔍",mode:"name",
+  labL:"รูปอุปกรณ์",labR:"ชื่ออุปกรณ์",tip:"ลากชื่อฝั่งขวาไปวางบนรูปที่ตรงกัน 👉",
+  pairs:devPairs(["monitor","mouse","keyboard","speaker","printer","webcam"])},
+ {title:"จับคู่อุปกรณ์กับหน้าที่",desc:"ลากหน้าที่ไปวางบนอุปกรณ์",emoji:"🧩",mode:"func",
+  labL:"อุปกรณ์",labR:"หน้าที่",tip:"ลากหน้าที่ฝั่งขวาไปวางบนอุปกรณ์ที่ทำหน้าที่นั้น",
+  pairs:[
+   {id:"keyboard",icon:"keyboard",right:{text:"พิมพ์ตัวอักษรและตัวเลข"}},
+   {id:"mouse",icon:"mouse",right:{text:"เลื่อนตัวชี้และคลิกเลือก"}},
+   {id:"webcam",icon:"webcam",right:{text:"ถ่ายภาพและคุยวิดีโอคอล"}},
+   {id:"printer",icon:"printer",right:{text:"พิมพ์งานลงบนกระดาษ"}},
+   {id:"speaker",icon:"speaker",right:{text:"ทำให้เราได้ยินเสียง"}}
+  ]},
+ {title:"จับคู่คำศัพท์กับความหมาย",desc:"ลากความหมายไปวางบนคำศัพท์",emoji:"📚",mode:"term",
+  labL:"คำศัพท์",labR:"ความหมาย",tip:"ลากความหมายฝั่งขวาไปวางบนคำศัพท์ที่ตรงกัน",
+  pairs:[
+   {id:"hw",emoji:"⚙️",text:"ฮาร์ดแวร์",right:{text:"ส่วนของคอมพิวเตอร์ที่จับต้องได้"}},
+   {id:"sw",emoji:"💿",text:"ซอฟต์แวร์",right:{text:"โปรแกรมที่สั่งให้คอมพิวเตอร์ทำงาน"}},
+   {id:"in",emoji:"⌨️",text:"อุปกรณ์รับข้อมูล",right:{text:"ส่งข้อมูลเข้าคอมพิวเตอร์ เช่น เมาส์"}},
+   {id:"out",emoji:"🖥️",text:"อุปกรณ์แสดงผล",right:{text:"แสดงผลลัพธ์ออกมา เช่น จอภาพ"}},
+   {id:"pw",emoji:"🔑",text:"รหัสผ่าน",right:{text:"ความลับสำหรับเข้าบัญชี ห้ามบอกใคร"}}
+  ]},
+ {title:"สุดยอดเซียนคอมพิวเตอร์",desc:"ด่านท้าทาย เลือกอุปกรณ์ให้เหมาะกับสถานการณ์",emoji:"🏆",mode:"sit",
+  labL:"สถานการณ์",labR:"อุปกรณ์ที่ใช้",tip:"ลากอุปกรณ์ที่เหมาะสมไปวางบนสถานการณ์",
+  pairs:[
+   {id:"speaker",emoji:"🎵",text:"อยากฟังเพลงจากคอมพิวเตอร์",right:{icon:"speaker"}},
+   {id:"webcam",emoji:"👩‍🏫",text:"คุยวิดีโอคอลให้ครูเห็นหน้า",right:{icon:"webcam"}},
+   {id:"printer",emoji:"📄",text:"อยากได้ใบงานเป็นกระดาษ",right:{icon:"printer"}},
+   {id:"mouse",emoji:"🎮",text:"ชี้และคลิกเลือกเมนูเกม",right:{icon:"mouse"}},
+   {id:"keyboard",emoji:"💬",text:"ต้องพิมพ์ชื่อและข้อความ",right:{icon:"keyboard"}}
+  ]}
+];
+var POINTS=10, STORE="pkcw_dd_v1";
+
+/* ---------- บันทึกความคืบหน้า ---------- */
+var save={unlocked:1,best:[0,0,0,0],passed:[false,false,false,false]};
+try{
+  var raw=localStorage.getItem(STORE);
+  if(raw){var o=JSON.parse(raw);
+    if(o&&typeof o.unlocked==="number"&&Array.isArray(o.best)&&Array.isArray(o.passed)){save=o;}}
+}catch(e){}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(save));}catch(e){}}
+function total(){var t=0;for(var i=0;i<save.best.length;i++)t+=save.best[i];return t;}
+function maxTotal(){var t=0;LEVELS.forEach(function(L){t+=L.pairs.length*POINTS;});return t;}
+
+function $(id){return document.getElementById(id);}
+function show(id){
+  var s=document.querySelectorAll(".screen");
+  for(var i=0;i<s.length;i++)s[i].classList.remove("active");
+  $(id).classList.add("active");window.scrollTo(0,0);
+}
+function shuffle(a){
+  a=a.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+
+/* ---------- เสียงน่ารัก ๆ (Web Audio ไม่ใช้ไฟล์ภายนอก) ---------- */
+var ac=null, soundOn=true;
+function ensureAudio(){
+  try{
+    if(!ac){var C=window.AudioContext||window.webkitAudioContext;if(C)ac=new C();}
+    if(ac&&ac.state==="suspended")ac.resume();
+  }catch(e){}
+}
+function tone(f,t,d,type,v){
+  if(!soundOn||!ac)return;
+  try{
+    var o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+t;
+    o.type=type||"sine";o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,s);
+    g.gain.exponentialRampToValueAtTime(v||0.2,s+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,s+d);
+    o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+d+0.05);
+  }catch(e){}
+}
+function sfxOk(){tone(784,0,.12,"sine",.22);tone(988,.09,.12,"sine",.22);tone(1319,.18,.22,"sine",.22);}
+function sfxBad(){tone(300,0,.16,"triangle",.25);tone(230,.14,.26,"triangle",.25);}
+function sfxWin(){[523,659,784,1047,784,1047,1319].forEach(function(f,i){tone(f,i*.13,.22,"sine",.22);});}
+
+/* ---------- ข้อความลอย / เอฟเฟกต์ ---------- */
+var toastTimer=null;
+function toast(msg,good){
+  var t=$("toast");t.textContent=msg;t.className="show"+(good?" good":"");
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.className="";},1700);
+}
+function burst(el){
+  var r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  var em=["✨","💖","⭐","🌟","💕","🎉"];
+  for(var i=0;i<9;i++){
+    var s=document.createElement("span");s.className="sp";
+    s.textContent=em[Math.floor(Math.random()*em.length)];
+    var ang=Math.random()*Math.PI*2,dist=40+Math.random()*50;
+    s.style.left=cx+"px";s.style.top=cy+"px";
+    s.style.setProperty("--dx",Math.cos(ang)*dist+"px");
+    s.style.setProperty("--dy",Math.sin(ang)*dist+"px");
+    document.body.appendChild(s);
+    (function(n){setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},950);})(s);
+  }
+}
+
+/* ---------- หน้าแรก / เลือกด่าน ---------- */
+(function(){
+  var k=["monitor","mouse","keyboard","speaker","printer","webcam"],h="";
+  for(var i=0;i<k.length;i++)h+='<div class="ico">'+ICONS[k[i]]+'</div>';
+  $("heroIcons").innerHTML=h;
+})();
+function renderLevels(){
+  var box=$("levelList");box.innerHTML="";
+  LEVELS.forEach(function(L,i){
+    var locked=i>=save.unlocked;
+    var b=document.createElement("button");
+    b.type="button";b.className="level"+(locked?" locked":"");
+    var max=L.pairs.length*POINTS;
+    var best=save.passed[i]?"ผ่านแล้ว ⭐ คะแนนสูงสุด "+save.best[i]+"/"+max:"";
+    b.innerHTML='<span class="num">'+(i+1)+'</span><span class="info"><span class="name">'+L.emoji+" ด่านที่ "+(i+1)+": "+L.title+'</span><span class="desc">'+(locked?"จับคู่ด่านก่อนหน้าให้ครบเพื่อปลดล็อก":L.desc)+'</span>'+(best&&!locked?'<span class="best">'+best+'</span>':'')+'</span><span class="state">'+(locked?"🔒":"▶️")+'</span>';
+    b.addEventListener("click",function(){if(!locked)startLevel(i);});
+    box.appendChild(b);
+  });
+  $("totalBox").textContent="คะแนนรวมสะสม: "+total()+" / "+maxTotal()+" คะแนน";
+}
+function openLevels(){cancelDrag();renderLevels();show("levels");}
+
+/* ---------- เล่นเกม ---------- */
+var cur=0,matches=0,mistakes=0,score=0,locked=false,selected=null,drag=null;
+
+function leftHTML(L,p){
+  if(L.mode==="name")return '<div class="pic">'+ICONS[p.icon]+'</div>';
+  if(L.mode==="func")return '<div class="lhs"><div class="pic">'+ICONS[p.icon]+'</div><b>'+NAMES[p.icon]+'</b></div>';
+  return '<div class="lhs"><span class="em">'+p.emoji+'</span><b>'+p.text+'</b></div>';
+}
+function rightHTML(p){
+  if(p.right.icon)return '<span class="mini">'+ICONS[p.right.icon]+'</span><span>'+NAMES[p.right.icon]+'</span>';
+  return '<span>'+p.right.text+'</span>';
+}
+function startLevel(i){
+  cancelDrag();
+  cur=i;matches=0;mistakes=0;score=0;locked=false;selected=null;
+  var L=LEVELS[i];
+  show("play");
+  $("pLevel").textContent="ด่านที่ "+(i+1)+" "+L.emoji;
+  $("labL").textContent=L.labL;$("labR").textContent=L.labR+" (ลากได้)";
+  $("pTip").textContent=L.tip;
+  var sl=$("slots"),ch=$("chips");sl.innerHTML="";ch.innerHTML="";
+  L.pairs.forEach(function(p){
+    var s=document.createElement("div");
+    s.className="slot"+(L.mode==="name"?" row":"");
+    s.setAttribute("data-id",p.id);
+    s.innerHTML='<div class="lhs-wrap" style="display:contents">'+leftHTML(L,p)+'</div><div class="drop"><span>วางที่นี่</span></div><span class="ok">✅</span>';
+    s.addEventListener("click",function(){
+      if(selected&&!s.classList.contains("matched")){var c=selected;deselect();attempt(c,s);}
+    });
+    sl.appendChild(s);
+  });
+  var order=shuffle(L.pairs);
+  if(L.pairs.length>1){
+    var same=true,guard=0;
+    while(same&&guard++<20){
+      same=order.every(function(p,k){return p.id===L.pairs[k].id;});
+      if(same)order=shuffle(L.pairs);
+    }
+  }
+  order.forEach(function(p,k){
+    var c=document.createElement("div");
+    c.className="chip c"+(k%6);c.setAttribute("data-id",p.id);
+    c.innerHTML=rightHTML(p);
+    bindChip(c);ch.appendChild(c);
+  });
+  updateHud();
+}
+function updateHud(){
+  var L=LEVELS[cur];
+  $("pScore").textContent="⭐ "+score+" คะแนน";
+  $("pBar").style.width=(matches/L.pairs.length*100)+"%";
+}
+
+/* ---------- ลากแล้ววาง (Pointer Events: นิ้ว/เมาส์/ปากกา) ---------- */
+function deselect(){if(selected){selected.classList.remove("sel");selected=null;}}
+function slotAt(x,y){
+  var el=document.elementFromPoint(x,y);
+  return el&&el.closest?el.closest(".slot:not(.matched)"):null;
+}
+function setOver(slot){
+  if(drag&&drag.over&&drag.over!==slot)drag.over.classList.remove("over");
+  if(slot)slot.classList.add("over");
+  if(drag)drag.over=slot;
+}
+function bindChip(chip){
+  chip.addEventListener("pointerdown",function(e){
+    if(locked||chip.classList.contains("done")||drag)return;
+    if(e.pointerType==="mouse"&&e.button!==0)return;
+    e.preventDefault();ensureAudio();
+    var r=chip.getBoundingClientRect();
+    drag={chip:chip,pid:e.pointerId,sx:e.clientX,sy:e.clientY,ox:e.clientX-r.left,oy:e.clientY-r.top,
+          w:r.width,h:r.height,on:false,clone:null,over:null};
+    try{chip.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  chip.addEventListener("pointermove",function(e){
+    if(!drag||drag.chip!==chip||e.pointerId!==drag.pid)return;
+    if(!drag.on){
+      if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)<6)return;
+      drag.on=true;deselect();
+      var c=chip.cloneNode(true);
+      c.classList.add("dragging");c.style.width=drag.w+"px";c.style.height=drag.h+"px";
+      document.body.appendChild(c);drag.clone=c;
+      chip.classList.add("ghost");
+    }
+    e.preventDefault();
+    drag.clone.style.left=(e.clientX-drag.ox)+"px";
+    drag.clone.style.top=(e.clientY-drag.oy)+"px";
+    setOver(slotAt(e.clientX,e.clientY));
+    if(e.clientY<70)window.scrollBy(0,-12);
+    else if(e.clientY>window.innerHeight-70)window.scrollBy(0,12);
+  });
+  chip.addEventListener("pointerup",function(e){
+    if(!drag||drag.chip!==chip||e.pointerId!==drag.pid)return;
+    var d=drag;
+    if(d.on){
+      var slot=slotAt(e.clientX,e.clientY);
+      cancelDrag();
+      if(slot)attempt(chip,slot);
+    }else{
+      drag=null;
+      if(selected===chip){deselect();}
+      else{deselect();selected=chip;chip.classList.add("sel");toast("แตะช่องที่ต้องการวางได้เลย 👆",true);}
+    }
+  });
+  chip.addEventListener("pointercancel",function(){cancelDrag();});
+  chip.addEventListener("dragstart",function(e){e.preventDefault();});
+}
+function cancelDrag(){
+  if(drag){
+    if(drag.clone&&drag.clone.parentNode)drag.clone.parentNode.removeChild(drag.clone);
+    if(drag.chip)drag.chip.classList.remove("ghost");
+    if(drag.over)drag.over.classList.remove("over");
+    drag=null;
+  }
+  var ov=document.querySelectorAll(".slot.over");
+  for(var i=0;i<ov.length;i++)ov[i].classList.remove("over");
+  var cl=document.querySelectorAll(".chip.dragging");
+  for(var j=0;j<cl.length;j++)cl[j].parentNode.removeChild(cl[j]);
+}
+function attempt(chip,slot){
+  if(locked||slot.classList.contains("matched")||chip.classList.contains("done"))return;
+  if(chip.getAttribute("data-id")===slot.getAttribute("data-id"))success(chip,slot);
+  else wrong(chip,slot);
+}
+function success(chip,slot){
+  slot.classList.add("matched");
+  slot.querySelector(".drop").innerHTML=chip.innerHTML;
+  chip.classList.add("done");chip.classList.remove("sel","ghost");
+  matches++;score+=POINTS;updateHud();
+  sfxOk();burst(slot);toast("เก่งมาก! ถูกต้อง ✅",true);
+  if(matches===LEVELS[cur].pairs.length){
+    locked=true;
+    setTimeout(finishLevel,1100);
+  }
+}
+function wrong(chip,slot){
+  mistakes++;sfxBad();
+  toast("ยังไม่ถูก ลองใหม่น้า 💕",false);
+  slot.classList.remove("shake");chip.classList.remove("shake");
+  void slot.offsetWidth;
+  slot.classList.add("shake");chip.classList.add("shake");
+  setTimeout(function(){slot.classList.remove("shake");chip.classList.remove("shake");},500);
+}
+
+/* ---------- สรุปผล ---------- */
+function finishLevel(){
+  var L=LEVELS[cur],n=L.pairs.length,last=(cur===LEVELS.length-1);
+  if(score>save.best[cur])save.best[cur]=score;
+  save.passed[cur]=true;
+  if(!last&&save.unlocked<cur+2)save.unlocked=cur+2;
+  persist();
+  var st=mistakes<=1?3:(mistakes<=3?2:1),s="";
+  for(var k=0;k<3;k++)s+=(k<st?"⭐":"☆");
+  sfxWin();
+  $("rTitle").textContent="🎊 ผ่านด่านที่ "+(cur+1)+"!";
+  $("rStars").textContent=s;
+  $("rScore").textContent=score+" คะแนน";
+  $("rPairs").textContent=n+" / "+n+" คู่";
+  $("rMiss").textContent=mistakes+" ครั้ง";
+  $("rMsg").textContent=last?"เก่งที่สุดเลย! คุณพิชิตด่านสุดท้ายแล้ว":"ยอดเยี่ยม! ปลดล็อกด่านที่ "+(cur+2)+" แล้ว";
+  var fin=$("rFinal");
+  if(last){
+    fin.style.display="block";
+    fin.textContent="🏆 ขอแสดงความยินดี! คุณพิชิตโลกคอมพิวเตอร์ครบทุกด่านแล้ว คะแนนรวมสะสม "+total()+" / "+maxTotal()+" คะแนน";
+  }else fin.style.display="none";
+  $("btnNextLevel").style.display=last?"none":"block";
+  show("result");
+}
+
+/* ---------- ปุ่มต่าง ๆ ---------- */
+$("btnStart").addEventListener("click",function(){ensureAudio();openLevels();});
+$("btnLevelsHome").addEventListener("click",function(){show("home");});
+$("btnReset").addEventListener("click",function(){
+  if(window.confirm("ล้างความคืบหน้าและเริ่มเล่นใหม่ทั้งหมดหรือไม่?")){
+    save={unlocked:1,best:[0,0,0,0],passed:[false,false,false,false]};
+    persist();renderLevels();
+  }
+});
+$("btnQuit").addEventListener("click",openLevels);
+$("btnRestart").addEventListener("click",function(){startLevel(cur);});
+$("btnSound").addEventListener("click",function(){
+  soundOn=!soundOn;$("btnSound").textContent=soundOn?"🔊":"🔇";ensureAudio();
+});
+$("btnNextLevel").addEventListener("click",function(){
+  if(cur+1<LEVELS.length&&cur+1<save.unlocked)startLevel(cur+1);else openLevels();
+});
+$("btnRetry").addEventListener("click",function(){startLevel(cur);});
+$("btnToLevels").addEventListener("click",openLevels);
+$("btnToHome").addEventListener("click",function(){show("home");});
+
+})();
+</script>
+</body>
+</html>
+
+</body></html>
